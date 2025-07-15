@@ -13,7 +13,8 @@ brew install git gh lazygit lazydocker mcfly spaceship
 
 # custom .zshrc
 mv ~/.zshrc ~/.zshrc.bak
-cat >>~/.zshrc <<EOF
+# delimiter word must be quoted to avoid expansion in the heredoc
+cat >>~/.zshrc <<'EOF'
 export LANG=en_US.UTF-8
 
 # start zsh config - https://postgresqlstan.github.io/cli/zsh-history-options/
@@ -43,7 +44,7 @@ EOF
 
 # (optional) git config
 # partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
-cat >>~/.gitconfig <<EOF
+cat >>~/.gitconfig <<'EOF'
 [core]
 	editor = code --wait
 [alias]
@@ -60,7 +61,7 @@ cat >>~/.gitconfig <<EOF
 EOF
 
 # (optional) spaceship config
-cat >>~/.spaceshiprc.zsh <<EOF
+cat >>~/.spaceshiprc.zsh <<'EOF'
 # https://spaceship-prompt.sh/config/prompt/
 spaceship remove azure
 spaceship remove docker
