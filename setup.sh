@@ -1,5 +1,11 @@
 #! /bin/bash
 
+# brew installation is nuked on restart,
+# but the config files in home dir are not.
+
+# gitconfig with zdiff3 breaks brew installation as default git is too old
+mv ~/.gitconfig ~/.gitconfig.bak
+
 # install homebrew
 # pipe from echo to avoid prompt
 # https://github.com/Homebrew/legacy-homebrew/issues/46779#issuecomment-162819088
@@ -10,6 +16,30 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # install preferred formula
 brew install git gh lazygit lazydocker mcfly spaceship
+
+# (optional) git config
+# partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
+cat >~/.gitconfig <<'EOF'
+[core]
+	editor = code --wait
+[alias]
+  s = status -s
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --tags
+	co = checkout
+[merge]
+	conflictstyle = zdiff3
+[diff]
+	algorithm = histogram
+[log]
+	date = iso
+EOF
+
+# check if .zshrc already been modified
+if grep -q "eval.*mcfly init zsh" ~/.zshrc 2>/dev/null; then
+    echo ".zshrc already contains our modifications. Exiting..."
+    exit 0
+fi
 
 # custom .zshrc
 mv ~/.zshrc ~/.zshrc.bak
@@ -42,23 +72,6 @@ alias lg='lazygit'
 alias ld='lazydocker'
 EOF
 
-# (optional) git config
-# partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
-cat >>~/.gitconfig <<'EOF'
-[core]
-	editor = code --wait
-[alias]
-  s = status -s
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
-	lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --tags
-	co = checkout
-[merge]
-	conflictstyle = zdiff3
-[diff]
-	algorithm = histogram
-[log]
-	date = iso
-EOF
 
 # (optional) spaceship config
 cat >>~/.spaceshiprc.zsh <<'EOF'
