@@ -15,7 +15,7 @@ echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/ins
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 # install preferred formula
-brew install git gh lazygit lazydocker mcfly spaceship
+brew install git gh lazygit lazydocker mcfly starship
 
 # (optional) git config
 # partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
@@ -64,7 +64,7 @@ setopt INC_APPEND_HISTORY       # don’t wait for shell to exit to save history
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-source $(brew --prefix)/opt/spaceship/spaceship.zsh
+eval "$(starship init zsh)"
 
 eval "$(mcfly init zsh)"
 
@@ -73,10 +73,8 @@ alias ld='lazydocker'
 EOF
 
 
-# (optional) spaceship config
-cat >>~/.spaceshiprc.zsh <<'EOF'
-# https://spaceship-prompt.sh/config/prompt/
-spaceship remove azure
-spaceship remove docker
-spaceship remove package
+# (optional) starship config
+cat >>~/.config/starship.toml <<'EOF'
+[time]
+disabled = false
 EOF
