@@ -62,6 +62,14 @@ setopt HIST_REDUCE_BLANKS       # strip superfluous blanks
 setopt INC_APPEND_HISTORY       # don’t wait for shell to exit to save history lines
 # end zsh config
 
+# Cycle through history based on characters already typed on the line
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "$key[Up]" up-line-or-beginning-search
+bindkey "$key[Down]" down-line-or-beginning-search
+
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 eval "$(starship init zsh)"
