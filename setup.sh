@@ -1,5 +1,7 @@
 #! /bin/bash
 
+sudo timedatectl set-timezone Australia/Melbourne
+
 # brew installation is nuked on restart,
 # but the config files in home dir are not.
 
