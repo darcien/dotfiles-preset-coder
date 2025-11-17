@@ -69,8 +69,10 @@ autoload -U up-line-or-beginning-search
 autoload -U down-line-or-beginning-search
 zle -N up-line-or-beginning-search
 zle -N down-line-or-beginning-search
-bindkey "$key[Up]" up-line-or-beginning-search
-bindkey "$key[Down]" down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search    # Up arrow
+bindkey "^[[B" down-line-or-beginning-search  # Down arrow
+bindkey "^[OA" up-line-or-beginning-search    # Up arrow (alternate)
+bindkey "^[OB" down-line-or-beginning-search  # Down arrow (alternate)
 
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
