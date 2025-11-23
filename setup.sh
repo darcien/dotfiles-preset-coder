@@ -37,6 +37,9 @@ cat >~/.gitconfig <<'EOF'
 	date = iso
 EOF
 
+# ensure .zsh_history exists for mcfly
+touch ~/.zsh_history
+
 # check if .zshrc already been modified
 if grep -q "eval.*mcfly init zsh" ~/.zshrc 2>/dev/null; then
     echo ".zshrc already contains our modifications. Exiting..."
