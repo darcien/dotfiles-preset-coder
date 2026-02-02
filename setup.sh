@@ -23,7 +23,7 @@ brew install git gh lazygit lazydocker mcfly starship
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 sudo apt-get update
-sudo apt-get install -y build-essential # for cc
+sudo apt-get install -y build-essential pkg-config libssl-dev # for cc and openssl
 
 # (optional) git config
 # partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
