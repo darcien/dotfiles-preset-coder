@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 sudo timedatectl set-timezone Australia/Melbourne
 
@@ -31,7 +31,7 @@ cat >~/.gitconfig <<'EOF'
 [core]
 	editor = code --wait
 [alias]
-  s = status -s
+	s = status -s
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
 	lgt = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --tags
 	co = checkout
