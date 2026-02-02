@@ -19,6 +19,9 @@ eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 # install preferred formula
 brew install git gh lazygit lazydocker mcfly starship
 
+# install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
 # install rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
