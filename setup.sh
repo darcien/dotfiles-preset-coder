@@ -49,7 +49,7 @@ cat >~/.config/opencode/opencode.jsonc <<'EOF'
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "github-copilot/claude-sonnet-4.6",
-  // "enabled_providers": ["github-copilot"],
+  "enabled_providers": ["github-copilot"],
   // https://github.com/anomalyco/opencode/issues/9203
   "provider": {
     "github-copilot": {
