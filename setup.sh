@@ -97,6 +97,8 @@ eval "$(mcfly init zsh)"
 
 alias lg='lazygit'
 alias ld='lazydocker'
+
+export PATH="$(npm config get prefix)/bin:$PATH"
 EOF
 
 # opencode
