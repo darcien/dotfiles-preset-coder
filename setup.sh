@@ -1,36 +1,50 @@
 #!/bin/bash
+set -euo pipefail
 
 sudo timedatectl set-timezone Australia/Melbourne
-
-# brew installation is nuked on restart,
-# but the config files in home dir are not.
-
-# gitconfig with zdiff3 breaks brew installation as default git is too old
-mv ~/.gitconfig ~/.gitconfig.bak
-
-# install homebrew
-# pipe from echo to avoid prompt
-# https://github.com/Homebrew/legacy-homebrew/issues/46779#issuecomment-162819088
-echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-# (optional) eval for active session
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-
-# install preferred formula
-brew install git gh lazygit lazydocker mcfly starship
-
-# install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# install rust
-# disabled for now, only needed for building personal local tools.
-# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 sudo apt-get update
 sudo apt-get install -y build-essential pkg-config libssl-dev # for cc and openssl
 
-# (optional) git config
-# partially derived from https://github.com/darcien/dotfiles/blob/master/.gitconfig
+
+# disable existing .gitconfig first.
+# zdiff3 in gitconfig breaks brew install (default git too old)
+[[ -f ~/.gitconfig ]] && mv ~/.gitconfig ~/.gitconfig.bak
+
+# homebrew
+if ! command -v brew &>/dev/null; then
+  # pipe from echo to avoid prompt
+  # https://github.com/Homebrew/legacy-homebrew/issues/46779#issuecomment-162819088
+  echo | /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
+brew install git gh lazygit lazydocker mcfly starship
+
+# uv
+if ! command -v uv &>/dev/null; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+
+# opencode
+if ! npm ls -g opencode-ai &>/dev/null; then
+  npm i -g opencode-ai
+fi
+
+mkdir -p ~/.config/opencode
+cat >~/.config/opencode/opencode.jsonc <<'EOF'
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "github-copilot/claude-sonnet-4.6",
+  "instructions": [".github/copilot-instructions.md", ".github/instructions/*.md"],
+  "skills": {
+    "paths": [".github/skills/**/SKILL.md"]
+  }
+}
+EOF
+
+# git config
 cat >~/.gitconfig <<'EOF'
 [core]
 	editor = code --wait
@@ -50,16 +64,8 @@ EOF
 # ensure .zsh_history exists for mcfly
 touch ~/.zsh_history
 
-# check if .zshrc already been modified
-if grep -q "eval.*mcfly init zsh" ~/.zshrc 2>/dev/null; then
-    echo ".zshrc already contains our modifications. Exiting..."
-    exit 0
-fi
-
-# custom .zshrc
-mv ~/.zshrc ~/.zshrc.bak
-# delimiter word must be quoted to avoid expansion in the heredoc
-cat >>~/.zshrc <<'EOF'
+# zsh
+cat >~/.zshrc <<'EOF'
 export LANG=en_US.UTF-8
 
 # start zsh config - https://postgresqlstan.github.io/cli/zsh-history-options/
@@ -93,31 +99,15 @@ eval "$(starship init zsh)"
 
 eval "$(mcfly init zsh)"
 
-# . "$HOME/.cargo/env"
-
 alias lg='lazygit'
 alias ld='lazydocker'
 
 export PATH="$(npm config get prefix)/bin:$PATH"
 EOF
 
-# opencode
-npm i -g opencode-ai
-mkdir -p ~/.config/opencode
-cat << 'EOF' >> ~/.config/opencode/opencode.jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "model": "github-copilot/claude-sonnet-4.6",
-  "instructions": [".github/copilot-instructions.md", ".github/instructions/*.md"],
-  "skills": {
-    "paths": [".github/skills/**/SKILL.md"]
-  }
-}
-EOF
-
-
-# (optional) starship config
-cat >>~/.config/starship.toml <<'EOF'
+# starship
+mkdir -p ~/.config
+cat >~/.config/starship.toml <<'EOF'
 [time]
 disabled = false
 EOF
