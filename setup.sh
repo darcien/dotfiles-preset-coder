@@ -23,7 +23,8 @@ brew install git gh lazygit lazydocker mcfly starship
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # install rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# disabled for now, only needed for building personal local tools.
+# curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 sudo apt-get update
 sudo apt-get install -y build-essential pkg-config libssl-dev # for cc and openssl
@@ -92,7 +93,7 @@ eval "$(starship init zsh)"
 
 eval "$(mcfly init zsh)"
 
-. "$HOME/.cargo/env"
+# . "$HOME/.cargo/env"
 
 alias lg='lazygit'
 alias ld='lazydocker'
