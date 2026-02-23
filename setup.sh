@@ -3,9 +3,12 @@ set -euo pipefail
 
 sudo timedatectl set-timezone Australia/Melbourne
 
-sudo apt-get update
-sudo apt-get install -y build-essential pkg-config libssl-dev # for cc and openssl
-
+wait_for_apt() {
+  while fuser /var/lib/dpkg/lock-frontend /var/lib/apt/lists/lock /var/lib/dpkg/lock >/dev/null 2>&1; do
+    echo "Waiting for apt lock to be released..."
+    sleep 2
+  done
+}
 
 # disable existing .gitconfig first.
 # zdiff3 in gitconfig breaks brew install (default git too old)
@@ -21,6 +24,15 @@ fi
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 brew install git gh lazygit lazydocker mcfly starship
+
+# apt
+# intentionally after brew (which takes time) to reduce race con with
+# other bootstrap scripts from coder setup.
+# ours is fine with lock, but the other scripts could fail.
+wait_for_apt
+sudo apt-get update
+wait_for_apt
+sudo apt-get install -y build-essential pkg-config libssl-dev # for cc and openssl
 
 # uv
 if ! command -v uv &>/dev/null; then
