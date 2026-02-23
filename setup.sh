@@ -37,6 +37,19 @@ cat >~/.config/opencode/opencode.jsonc <<'EOF'
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "github-copilot/claude-sonnet-4.6",
+  // "enabled_providers": ["github-copilot"],
+  // https://github.com/anomalyco/opencode/issues/9203
+  "provider": {
+    "github-copilot": {
+      "whitelist": [
+        "claude-opus-4.5",
+        "claude-opus-4.6",
+        "claude-sonnet-4.5",
+        "claude-sonnet-4.6",
+        "claude-haiku-4.5",
+      ]
+    },
+  },
   "instructions": [".github/copilot-instructions.md", ".github/instructions/*.md"],
   "skills": {
     "paths": [".github/skills/**/SKILL.md"]
