@@ -118,6 +118,11 @@ alias ld='lazydocker'
 export PATH="$(npm config get prefix)/bin:$PATH"
 EOF
 
+# lazygit
+mkdir -p ~/.config/lazygit
+curl -fsSL https://raw.githubusercontent.com/darcien/dotfiles/master/dot_config/lazygit/config.yml \
+  -o ~/.config/lazygit/config.yml
+
 # starship
 mkdir -p ~/.config
 cat >~/.config/starship.toml <<'EOF'
