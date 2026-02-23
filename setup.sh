@@ -116,6 +116,7 @@ alias lg='lazygit'
 alias ld='lazydocker'
 
 export PATH="$(npm config get prefix)/bin:$PATH"
+source $HOME/.local/bin/env
 EOF
 
 # lazygit
