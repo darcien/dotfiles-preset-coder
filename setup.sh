@@ -99,6 +99,20 @@ alias lg='lazygit'
 alias ld='lazydocker'
 EOF
 
+# opencode
+npm i -g opencode-ai
+mkdir -p ~/.config/opencode
+cat << 'EOF' >> ~/.config/opencode/opencode.jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "github-copilot/claude-sonnet-4.6",
+  "instructions": [".github/copilot-instructions.md", ".github/instructions/*.md"],
+  "skills": {
+    "paths": [".github/skills/**/SKILL.md"]
+  }
+}
+EOF
+
 
 # (optional) starship config
 cat >>~/.config/starship.toml <<'EOF'
