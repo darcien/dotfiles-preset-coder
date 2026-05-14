@@ -3,6 +3,12 @@ set -euo pipefail
 
 # curl -fsSL https://raw.githubusercontent.com/darcien/dotfiles-preset-coder/master/setup-config-only.sh | bash
 
+FLAG="$HOME/.dotfiles-preset-coder-setup-done"
+if [ -f "$FLAG" ]; then
+  echo "Setup already ran on $(cat "$FLAG"). Remove $FLAG to re-run."
+  exit 0
+fi
+
 sudo timedatectl set-timezone Australia/Melbourne
 
 cat >~/.gitconfig <<'EOF'
@@ -22,8 +28,8 @@ EOF
 # ensure .zsh_history exists
 touch ~/.zsh_history
 
-# zsh
-cat >~/.zshrc <<'EOF'
+# zsh - append to existing .zshrc instead of overwriting
+cat >>~/.zshrc <<'EOF'
 export LANG=en_US.UTF-8
 
 # start zsh config - https://postgresqlstan.github.io/cli/zsh-history-options/
@@ -51,3 +57,7 @@ bindkey "^[[B" down-line-or-beginning-search  # Down arrow
 bindkey "^[OA" up-line-or-beginning-search    # Up arrow (alternate)
 bindkey "^[OB" down-line-or-beginning-search  # Down arrow (alternate)
 EOF
+
+# Mark setup as complete
+date -Iseconds > "$FLAG"
+echo "Setup complete."
